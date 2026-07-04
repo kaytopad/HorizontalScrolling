@@ -4,7 +4,7 @@
 
 #include "Camera.h"
 #include "Background.h"
-#include "WorldObject.h"
+#include "Map.h"
 
 class Game
 {
@@ -14,7 +14,7 @@ private:
 
 	Background background;
 
-	std::vector<WorldObject> objects;
+	std::vector<Map> objects;
 public:
 
 	void Init();
