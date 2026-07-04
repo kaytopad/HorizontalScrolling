@@ -20,8 +20,9 @@ void Camera::Update()
 
 	// Dキーで右移動
 	if (CheckHitKey(KEY_INPUT_D)){ x += GameConst::CAMERA_SPEED;}
-
+	// 画面外に出ないように制限
 	if (x < 0){ x = 0;}
+	if (x > GameConst::SCREEN_WIDTH) { x = GameConst::SCREEN_WIDTH; }
 }
 
 //=====================================================
