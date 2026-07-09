@@ -17,12 +17,9 @@ public:
 
 	void SetImages(int *img);
 
-	void Play(int startFrame, int frameCount, int speed,int currentTime);
+	void Play(int startFrame, int frameCount, int speed);
 
 	int GetImage(int currentTime);
-
-
-
 
 };
 

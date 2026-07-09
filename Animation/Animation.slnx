@@ -4,5 +4,5 @@
     <Platform Name="x64" />
     <Platform Name="x86" />
   </Configurations>
-  <Project Path="Animation.vcxproj" />
+  <Project Path="Animation.vcxproj" Id="c7842298-8abb-42c1-9413-d579546fdfd6" />
 </Solution>

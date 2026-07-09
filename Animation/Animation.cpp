@@ -22,12 +22,11 @@ void Animation::SetImages(int* img)
 //===============================
 // アニメーション再生
 //===============================
-void Animation::Play(int start, int frame, int spd, int currentTime)
+void Animation::Play(int start, int frame, int spd)
 {
 	startFrame = start;
 	frameCount = frame;
 	speed = spd;
-	startTime = currentTime;
 }
 
 //===============================
@@ -35,14 +34,10 @@ void Animation::Play(int start, int frame, int spd, int currentTime)
 //===============================
 int Animation::GetImage(int currentTime)
 {
-	//===============================
-	// 経過時間を計算
-	//===============================
-	int elapsedTime = currentTime - startTime;
 
 	//===============================
 	//アニメーション番号計算
 	//===============================
-	int fram = (elapsedTime / speed) % frameCount;
+	int fram = (currentTime / speed) % frameCount;
 	return images[startFrame + fram];
 }
