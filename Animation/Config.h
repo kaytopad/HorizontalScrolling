@@ -8,8 +8,8 @@ namespace Config
 	constexpr int WINDOW_WIDTH = 1920;
 	constexpr int WINDOW_HEIGHT = 1080;
 
-	constexpr int PLAYER_DRAW_X = 198;
-	constexpr int PLAYER_DRAW_Y = 198;
+	constexpr int PLAYER_DRAW_X = 96;
+	constexpr int PLAYER_DRAW_Y = 96;
 
 	//===============================
 	// Player settings
@@ -29,8 +29,8 @@ namespace Config
 	// アニメーション速度
 	//===============================
 	constexpr int IDLE_SPEED = 10;
-	constexpr int WALK_SPEED = 9;
-	constexpr int RUN_SPEED = 10;
+	constexpr int WALK_SPEED = 7;
+	constexpr int RUN_SPEED = 8;
 	constexpr int JUMP_SPEED = 6;
 
 }

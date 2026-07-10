@@ -7,7 +7,7 @@ void Game::Init()
 	//===============================
 	// 分割画像の読み込み
 	//===============================
-	LoadDivGraph("img/Character_Animation.png",
+	LoadDivGraph("img/AnimationPlayer1.png",
 		Config::PLAYER_TOTAL_FRAMES, 
 		Config::PLAYER_COL,
 		Config::PLAYER_ROW,
