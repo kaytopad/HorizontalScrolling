@@ -3,16 +3,18 @@
 namespace Config
 {
     //========================================
-    // ウィンドウ設定
+    // ウィンドウ
     //========================================
+
     constexpr int WINDOW_WIDTH = 1440;
     constexpr int WINDOW_HEIGHT = 900;
     constexpr int COLOR_BIT = 16;
 
 
     //========================================
-    // マップ設定
+    // マップ
     //========================================
+
     constexpr int MAP_CHIP_SIZE = 64;
 
     constexpr int MAP_X_NUM = 16;
@@ -22,18 +24,16 @@ namespace Config
     constexpr int MAP_IMG_X_NUM = 2;
     constexpr int MAP_IMG_Y_NUM = 1;
 
+    constexpr const char* MAP_IMAGE_PATH ="img/map.png";
+
 
     //========================================
-    // プレイヤー設定
+    // プレイヤー
     //========================================
 
-    // アニメーション
-    constexpr int ANIM_PATTERN_NUM = 3;
-    constexpr int ANIM_TYPE_NUM = 4;
+    constexpr float PLAYER_START_X = 100.0f;
+    constexpr float PLAYER_START_Y = 100.0f;
 
-    constexpr float ANIMATION_FPS = 6.0f;
-
-    // 移動速度
     constexpr float PLAYER_MOVE_SPEED = 200.0f;
 
     // プレイヤー画像サイズ
@@ -44,17 +44,15 @@ namespace Config
     constexpr int PLAYER_HIT_SIZE_X = 40;
     constexpr int PLAYER_HIT_SIZE_Y = 60;
 
-    // プレイヤー初期位置
-    constexpr float PLAYER_START_X = 100.0f;
-    constexpr float PLAYER_START_Y = 100.0f;
-
 
     //========================================
-    // ファイル
+    // アニメーション
     //========================================
-    constexpr const char* MAP_IMAGE_PATH =
-        "img/map.png";
 
-    constexpr const char* PLAYER_IMAGE_PATH =
-        "img/chara.png";
+    constexpr int ANIM_PATTERN_NUM = 3;
+    constexpr int ANIM_TYPE_NUM = 4;
+
+    constexpr float ANIMATION_FPS = 6.0f;
+
+    constexpr const char* PLAYER_IMAGE_PATH ="img/chara.png";
 }
