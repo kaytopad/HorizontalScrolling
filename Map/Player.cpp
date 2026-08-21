@@ -1,8 +1,6 @@
 #include "Player.h"
-
 #include "Map.h"
-
-#include <DxLib.h>
+#include "DxLib.h"
 
 
 namespace
@@ -40,11 +38,7 @@ Player::Player()
     drawOffsetY = 0;
 
 
-    for (
-        int i = 0;
-        i < Config::ANIM_PATTERN_NUM *
-        Config::ANIM_TYPE_NUM;
-        i++)
+    for (int i = 0; i < Config::ANIM_PATTERN_NUM *Config::ANIM_TYPE_NUM;i++)
     {
         playerImg[i] = -1;
     }
@@ -57,11 +51,7 @@ Player::Player()
 
 Player::~Player()
 {
-    for (
-        int i = 0;
-        i < Config::ANIM_PATTERN_NUM *
-        Config::ANIM_TYPE_NUM;
-        i++)
+    for (int i = 0; i < Config::ANIM_PATTERN_NUM *Config::ANIM_TYPE_NUM;i++)
     {
         if (playerImg[i] != -1)
         {
@@ -96,30 +86,15 @@ bool Player::Init()
     animNowType = ANIM_DOWN;
     animNowPattern = 1;
 
-    animNowIndex =
-        animNowPattern +
-        animNowType *
-        Config::ANIM_PATTERN_NUM;
+    animNowIndex = animNowPattern + animNowType * Config::ANIM_PATTERN_NUM;
 
 
     //========================================
     // 画像読み込み
     //========================================
 
-    int result = LoadDivGraph(
-        Config::PLAYER_IMAGE_PATH,
-
-        Config::ANIM_PATTERN_NUM *
-        Config::ANIM_TYPE_NUM,
-
-        Config::ANIM_PATTERN_NUM,
-        Config::ANIM_TYPE_NUM,
-
-        Config::PLAYER_IMAGE_SIZE_X,
-        Config::PLAYER_IMAGE_SIZE_Y,
-
-        playerImg
-    );
+    int result = LoadDivGraph(Config::PLAYER_IMAGE_PATH, Config::ANIM_PATTERN_NUM *Config::ANIM_TYPE_NUM,
+        Config::ANIM_PATTERN_NUM, Config::ANIM_TYPE_NUM, Config::PLAYER_IMAGE_SIZE_X,Config::PLAYER_IMAGE_SIZE_Y,playerImg);
 
 
     if (result != 0)
@@ -132,14 +107,10 @@ bool Player::Init()
     // 描画位置補正
     //========================================
 
-    drawOffsetX =
-        (Config::PLAYER_HIT_SIZE_X -
-            Config::PLAYER_IMAGE_SIZE_X) / 2;
+    drawOffsetX =(Config::PLAYER_HIT_SIZE_X - Config::PLAYER_IMAGE_SIZE_X) / 2;
 
 
-    drawOffsetY =
-        Config::PLAYER_HIT_SIZE_Y -
-        Config::PLAYER_IMAGE_SIZE_Y;
+    drawOffsetY = Config::PLAYER_HIT_SIZE_Y - Config::PLAYER_IMAGE_SIZE_Y;
 
 
     return true;
@@ -150,9 +121,7 @@ bool Player::Init()
 // 更新
 //========================================
 
-void Player::Update(
-    float deltaTime,
-    const Map& map)
+void Player::Update(float deltaTime,const Map& map)
 {
     //========================================
     // 速度をリセット
@@ -171,8 +140,7 @@ void Player::Update(
 
     if (CheckHitKey(KEY_INPUT_UP))
     {
-        velocityY =
-            -Config::PLAYER_MOVE_SPEED;
+        velocityY =-Config::PLAYER_MOVE_SPEED;
 
         animNowType = ANIM_UP;
 
@@ -182,8 +150,7 @@ void Player::Update(
 
     if (CheckHitKey(KEY_INPUT_DOWN))
     {
-        velocityY =
-            Config::PLAYER_MOVE_SPEED;
+        velocityY = Config::PLAYER_MOVE_SPEED;
 
         animNowType = ANIM_DOWN;
 
@@ -193,8 +160,7 @@ void Player::Update(
 
     if (CheckHitKey(KEY_INPUT_LEFT))
     {
-        velocityX =
-            -Config::PLAYER_MOVE_SPEED;
+        velocityX = -Config::PLAYER_MOVE_SPEED;
 
         animNowType = ANIM_LEFT;
 
@@ -204,8 +170,7 @@ void Player::Update(
 
     if (CheckHitKey(KEY_INPUT_RIGHT))
     {
-        velocityX =
-            Config::PLAYER_MOVE_SPEED;
+        velocityX = Config::PLAYER_MOVE_SPEED;
 
         animNowType = ANIM_RIGHT;
 
@@ -217,11 +182,9 @@ void Player::Update(
     // 移動量
     //========================================
 
-    float moveX =
-        velocityX * deltaTime;
+    float moveX = velocityX * deltaTime;
 
-    float moveY =
-        velocityY * deltaTime;
+    float moveY = velocityY * deltaTime;
 
 
     //========================================
@@ -231,15 +194,7 @@ void Player::Update(
     x += moveX;
 
 
-    map.ResolveHorizontalCollision(
-        x,
-        y,
-
-        Config::PLAYER_HIT_SIZE_X,
-        Config::PLAYER_HIT_SIZE_Y,
-
-        moveX
-    );
+    map.ResolveHorizontalCollision(x,y,Config::PLAYER_HIT_SIZE_X,Config::PLAYER_HIT_SIZE_Y,moveX);
 
 
     //========================================
@@ -249,15 +204,7 @@ void Player::Update(
     y += moveY;
 
 
-    map.ResolveVerticalCollision(
-        x,
-        y,
-
-        Config::PLAYER_HIT_SIZE_X,
-        Config::PLAYER_HIT_SIZE_Y,
-
-        moveY
-    );
+    map.ResolveVerticalCollision(x,y,Config::PLAYER_HIT_SIZE_X, Config::PLAYER_HIT_SIZE_Y,moveY);
 
 
     //========================================
@@ -269,17 +216,13 @@ void Player::Update(
         animTimer += deltaTime;
 
 
-        if (
-            animTimer >=
-            1.0f /
-            Config::ANIMATION_FPS)
+        if (animTimer >= 1.0f / Config::ANIMATION_FPS)
         {
             animTimer = 0.0f;
 
             animNowPattern++;
 
-            animNowPattern %=
-                Config::ANIM_PATTERN_NUM;
+            animNowPattern %= Config::ANIM_PATTERN_NUM;
         }
     }
     else
@@ -293,10 +236,7 @@ void Player::Update(
     // 描画する画像番号
     //========================================
 
-    animNowIndex =
-        animNowPattern +
-        animNowType *
-        Config::ANIM_PATTERN_NUM;
+    animNowIndex = animNowPattern + animNowType * Config::ANIM_PATTERN_NUM;
 }
 
 
@@ -306,39 +246,13 @@ void Player::Update(
 
 void Player::Draw()
 {
-    DrawGraph(
-        static_cast<int>(x) +
-        drawOffsetX,
-
-        static_cast<int>(y) +
-        drawOffsetY,
-
-        playerImg[animNowIndex],
-
-        TRUE
-    );
+    DrawGraph(static_cast<int>(x) + drawOffsetX, static_cast<int>(y) + drawOffsetY, playerImg[animNowIndex], TRUE);
 
 
     //========================================
     // 当たり判定表示
     //========================================
 
-    DrawBox(
-        static_cast<int>(x),
-        static_cast<int>(y),
-
-        static_cast<int>(
-            x +
-            Config::PLAYER_HIT_SIZE_X -
-            1),
-
-        static_cast<int>(
-            y +
-            Config::PLAYER_HIT_SIZE_Y -
-            1),
-
-        GetColor(255, 0, 0),
-
-        FALSE
-    );
+    DrawBox( static_cast<int>(x), static_cast<int>(y), static_cast<int>( x + Config::PLAYER_HIT_SIZE_X -1),
+        static_cast<int>(y + Config::PLAYER_HIT_SIZE_Y - 1),GetColor(255, 0, 0),FALSE);
 }

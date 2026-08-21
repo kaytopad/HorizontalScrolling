@@ -49,10 +49,7 @@ private:
     // プレイヤー画像
     //========================================
 
-    int playerImg[
-        Config::ANIM_PATTERN_NUM *
-            Config::ANIM_TYPE_NUM
-    ];
+    int playerImg[Config::ANIM_PATTERN_NUM *Config::ANIM_TYPE_NUM];
 
 
 public:
@@ -72,10 +69,7 @@ public:
     // 更新
     //========================================
 
-    void Update(
-        float deltaTime,
-        const Map& map
-    );
+    void Update(float deltaTime,const Map& map);
 
 
     //========================================
