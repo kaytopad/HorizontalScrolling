@@ -12,7 +12,6 @@ private:
     float velocityX;
     float velocityY;
 
-
     // ジャンプ
     bool jumpFlag;
     bool groundFlag;
@@ -31,9 +30,7 @@ private:
 
 
     // 画像
-    int playerImg[
-        3 * 4
-    ];
+    int playerImg[3 * 4];
 
 
     // コライダー

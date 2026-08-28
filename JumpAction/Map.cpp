@@ -82,7 +82,7 @@ bool Map::CheckCollision(Collision& player)
                 player.FixPosition(block);
                 hit = true;
             }
-        }
+                    }
     }
 
     return hit;

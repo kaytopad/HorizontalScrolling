@@ -17,40 +17,23 @@ void Player::Init()
 
     previousJump = false;
 
-
     animationTimer = 0.0f;
     animationType = 0;
     animationPattern = 0;
 
 
-    collision.Init(
-        Config::PLAYER_WIDTH,
-        Config::PLAYER_HEIGHT
-    );
+    // 当たり判定
+    collision.Init(Config::PLAYER_WIDTH,Config::PLAYER_HEIGHT);
 
-    footCollision.Init(
-        Config::PLAYER_WIDTH -
-        Config::COLLIDER_OFFSET,
-        1.0f
-    );
+    footCollision.Init(Config::PLAYER_WIDTH - Config::COLLIDER_OFFSET,1.0f);
 
-    headCollision.Init(
-        Config::PLAYER_WIDTH -
-        Config::COLLIDER_OFFSET,
-        1.0f
-    );
+    headCollision.Init(Config::PLAYER_WIDTH - Config::COLLIDER_OFFSET,1.0f);
 
 
-    LoadDivGraph(
-        "img/chara.png",
-        Config::PLAYER_ANIM_PATTERN_NUM *
-        Config::PLAYER_ANIM_TYPE_NUM,
-        Config::PLAYER_ANIM_PATTERN_NUM,
-        Config::PLAYER_ANIM_TYPE_NUM,
-        Config::PLAYER_IMAGE_WIDTH,
-        Config::PLAYER_IMAGE_HEIGHT,
-        playerImg
-    );
+    // プレイヤー画像読み込み
+    LoadDivGraph( "img/chara.png", Config::PLAYER_ANIM_PATTERN_NUM * Config::PLAYER_ANIM_TYPE_NUM,
+        Config::PLAYER_ANIM_PATTERN_NUM, Config::PLAYER_ANIM_TYPE_NUM,
+        Config::PLAYER_IMAGE_WIDTH, Config::PLAYER_IMAGE_HEIGHT, playerImg);
 }
 
 
@@ -74,15 +57,9 @@ void Player::Update(float deltaTime)
     // コライダー位置更新
     collision.SetPosition(x, y);
 
-    footCollision.SetPosition(
-        x + Config::COLLIDER_OFFSET / 2.0f,
-        y + Config::PLAYER_HEIGHT
-    );
+    footCollision.SetPosition( x + Config::COLLIDER_OFFSET / 2.0f,y + Config::PLAYER_HEIGHT );
 
-    headCollision.SetPosition(
-        x + Config::COLLIDER_OFFSET / 2.0f,
-        y - 1.0f
-    );
+    headCollision.SetPosition( x + Config::COLLIDER_OFFSET / 2.0f, y - 1.0f);
 
 
     // アニメーション
@@ -90,15 +67,13 @@ void Player::Update(float deltaTime)
     {
         animationTimer += deltaTime;
 
-        if (animationTimer >
-            1.0f / Config::PLAYER_ANIMATION_FPS)
+        if (animationTimer > 1.0f / Config::PLAYER_ANIMATION_FPS)
         {
             animationTimer = 0.0f;
 
             animationPattern++;
 
-            animationPattern %=
-                Config::PLAYER_ANIM_PATTERN_NUM;
+            animationPattern %= Config::PLAYER_ANIM_PATTERN_NUM;
         }
     }
     else
@@ -226,10 +201,18 @@ void Player::Move(float deltaTime)
 
 void Player::Draw()
 {
-    int index = animationPattern + animationType * Config::PLAYER_ANIM_PATTERN_NUM;
+    int index = animationPattern +  animationType * Config::PLAYER_ANIM_PATTERN_NUM;
 
-    DrawGraph( static_cast<int>(x), static_cast<int>(y), playerImg[index],TRUE);
-    // デバッグ
+    // 当たり判定を基準に画像を配置
+    int drawX = static_cast<int>(x) -(Config::PLAYER_IMAGE_WIDTH - Config::PLAYER_WIDTH) / 2;
+
+    int drawY = static_cast<int>(y) + Config::PLAYER_HEIGHT - Config::PLAYER_IMAGE_HEIGHT;
+
+
+    DrawGraph( drawX, drawY, playerImg[index], TRUE );
+
+
+    // 当たり判定表示
     collision.Draw();
 }
 
