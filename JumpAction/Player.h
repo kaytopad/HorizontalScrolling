@@ -12,31 +12,31 @@ private:
     float velocityX;
     float velocityY;
 
-    // ã‚¸ãƒ£ãƒ³ãƒ—
+    // ƒWƒƒƒ“ƒv
     bool jumpFlag;
     bool groundFlag;
     bool headHitFlag;
 
 
-    // ã‚¸ãƒ£ãƒ³ãƒ—ã‚­ãƒ¼
+    // ƒWƒƒƒ“ƒvƒL[
     bool previousJump;
 
 
-    // ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³
+    // ƒAƒjƒ[ƒVƒ‡ƒ“
     float animationTimer;
 
     int animationType;
     int animationPattern;
 
 
-    // ç”»åƒ
+    // ‰æ‘œ
     int playerImg[3 * 4];
 
 
-    // ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼
-    Collision collision;
-    Collision footCollision;
-    Collision headCollision;
+    // ƒRƒ‰ƒCƒ_[
+    Collision collision;    //–{‘Ì‚Ì“–‚½‚è”»’è
+    Collision footCollision;//‘«Œ³‚Ì“–‚½‚è”»’è
+    Collision headCollision;//“ª‚Ì“–‚½‚è”»’è
 
 
 public:
