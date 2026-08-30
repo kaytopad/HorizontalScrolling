@@ -3,7 +3,7 @@
 
 #include <cmath>
 
-
+using namespace std;
 void Collision::Init(float width, float height)
 {
     this->width = width;
@@ -45,12 +45,12 @@ void Collision::FixPosition(const Collision& other)
     float bottomPush = other.bottom - top;
 
 
-    float pushX = std::fabs(leftPush) < std::fabs(rightPush)? leftPush: rightPush;
+    float pushX = fabs(leftPush) < fabs(rightPush)? leftPush: rightPush;
 
-    float pushY = std::fabs(topPush) < std::fabs(bottomPush)? topPush: bottomPush;
+    float pushY = fabs(topPush) < fabs(bottomPush)? topPush: bottomPush;
 
 
-    if (std::fabs(pushX) < std::fabs(pushY))
+    if (fabs(pushX) <  fabs(pushY))
     {
         left += pushX;
         right += pushX;
