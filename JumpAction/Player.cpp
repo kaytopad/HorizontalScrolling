@@ -22,7 +22,7 @@ void Player::Init()
     animationPattern = 0;
 
 
-    // å½“ãŸã‚Šåˆ¤å®š
+    // “–‚½‚è”»’è
     collision.Init(Config::PLAYER_WIDTH,Config::PLAYER_HEIGHT);
 
     footCollision.Init(Config::PLAYER_WIDTH - Config::COLLIDER_OFFSET,1.0f);
@@ -30,7 +30,7 @@ void Player::Init()
     headCollision.Init(Config::PLAYER_WIDTH - Config::COLLIDER_OFFSET,1.0f);
 
 
-    // ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ç”»åƒèª­ã¿è¾¼ã¿
+    // ƒvƒŒƒCƒ„[‰æ‘œ“Ç‚İ‚İ
     LoadDivGraph( "img/chara.png", Config::PLAYER_ANIM_PATTERN_NUM * Config::PLAYER_ANIM_TYPE_NUM,
         Config::PLAYER_ANIM_PATTERN_NUM, Config::PLAYER_ANIM_TYPE_NUM,
         Config::PLAYER_IMAGE_WIDTH, Config::PLAYER_IMAGE_HEIGHT, playerImg);
@@ -39,7 +39,7 @@ void Player::Init()
 
 void Player::Update(float deltaTime)
 {
-    // æ¥åœ°ã—ã¦ã„ã‚‹
+    // Ú’n‚µ‚Ä‚¢‚é
     if (groundFlag)
     {
         jumpFlag = false;
@@ -54,7 +54,7 @@ void Player::Update(float deltaTime)
     Move(deltaTime);
 
 
-    // ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ä½ç½®æ›´æ–°
+    // ƒRƒ‰ƒCƒ_[ˆÊ’uXV
     collision.SetPosition(x, y);
 
     footCollision.SetPosition( x + Config::COLLIDER_OFFSET / 2.0f,y + Config::PLAYER_HEIGHT );
@@ -62,7 +62,7 @@ void Player::Update(float deltaTime)
     headCollision.SetPosition( x + Config::COLLIDER_OFFSET / 2.0f, y - 1.0f);
 
 
-    // ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³
+    // ƒAƒjƒ[ƒVƒ‡ƒ“
     if (velocityX != 0.0f)
     {
         animationTimer += deltaTime;
@@ -86,7 +86,7 @@ void Player::Update(float deltaTime)
 void Player::Move(float deltaTime)
 {
     //====================================
-    // å·¦å³ç§»å‹•
+    // ¶‰EˆÚ“®
     //====================================
 
     if (CheckHitKey(KEY_INPUT_LEFT))
@@ -107,7 +107,7 @@ void Player::Move(float deltaTime)
 
 
     //====================================
-    // é€Ÿåº¦åˆ¶é™
+    // ‘¬“x§ŒÀ
     //====================================
 
     if (velocityX >
@@ -126,11 +126,10 @@ void Player::Move(float deltaTime)
 
 
     //====================================
-    // æ‘©æ“¦
+    // –€C
     //====================================
 
-    if (!CheckHitKey(KEY_INPUT_LEFT) &&
-        !CheckHitKey(KEY_INPUT_RIGHT))
+    if (!CheckHitKey(KEY_INPUT_LEFT) &&!CheckHitKey(KEY_INPUT_RIGHT))
     {
         velocityX *=
             Config::PLAYER_FRICTION;
@@ -138,7 +137,7 @@ void Player::Move(float deltaTime)
 
 
     //====================================
-    // ã‚¸ãƒ£ãƒ³ãƒ—
+    // ƒWƒƒƒ“ƒv
     //====================================
 
     bool jumpButton =
@@ -161,7 +160,7 @@ void Player::Move(float deltaTime)
 
 
     //====================================
-    // é‡åŠ›
+    // d—Í
     //====================================
 
     if (jumpFlag)
@@ -171,7 +170,7 @@ void Player::Move(float deltaTime)
 
 
     //====================================
-    // é ­ã‚’ã¶ã¤ã‘ãŸ
+    // “ª‚ğ‚Ô‚Â‚¯‚½
     //====================================
 
     if (headHitFlag && velocityY < 0.0f)
@@ -181,7 +180,7 @@ void Player::Move(float deltaTime)
 
 
     //====================================
-    // è½ä¸‹é€Ÿåº¦åˆ¶é™
+    // —‰º‘¬“x§ŒÀ
     //====================================
 
     if (velocityY > Config::MAX_FALL_SPEED)
@@ -191,7 +190,7 @@ void Player::Move(float deltaTime)
 
 
     //====================================
-    // åº§æ¨™æ›´æ–°
+    // À•WXV
     //====================================
 
     x += velocityX * deltaTime;
@@ -203,7 +202,7 @@ void Player::Draw()
 {
     int index = animationPattern +  animationType * Config::PLAYER_ANIM_PATTERN_NUM;
 
-    // å½“ãŸã‚Šåˆ¤å®šã‚’åŸºæº–ã«ç”»åƒã‚’é…ç½®
+    // “–‚½‚è”»’è‚ğŠî€‚É‰æ‘œ‚ğ”z’u
     int drawX = static_cast<int>(x) -(Config::PLAYER_IMAGE_WIDTH - Config::PLAYER_WIDTH) / 2;
 
     int drawY = static_cast<int>(y) + Config::PLAYER_HEIGHT - Config::PLAYER_IMAGE_HEIGHT;
@@ -212,7 +211,7 @@ void Player::Draw()
     DrawGraph( drawX, drawY, playerImg[index], TRUE );
 
 
-    // å½“ãŸã‚Šåˆ¤å®šè¡¨ç¤º
+    // “–‚½‚è”»’è•\¦
     collision.Draw();
 }
 
@@ -225,7 +224,7 @@ void Player::Finalize()
     }
 }
 
-
+//“®‚¢‚Ä‚Ç‚±‚ª“–‚½‚Á‚Ä‚¢‚é‚©‚ğ”»’è
 Collision Player::GetCollision() const
 {
     return collision;
