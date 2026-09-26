@@ -9,7 +9,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	// Set the window title
 	SetWindowText("DxLib Example");
 	// Main loop
-	while (ProcessMessage() == 0) {
+	while (ProcessMessage() == 0 ) {
 		// Clear the screen
 		ClearDrawScreen();
 		// Draw something (e.g., a rectangle)
