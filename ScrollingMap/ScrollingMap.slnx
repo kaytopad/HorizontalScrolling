@@ -4,5 +4,5 @@
     <Platform Name="x64" />
     <Platform Name="x86" />
   </Configurations>
-  <Project Path="ScrollingMap.vcxproj" />
+  <Project Path="ScrollingMap.vcxproj" Id="49cb2756-71ad-4250-97c0-8773f3616923" />
 </Solution>
