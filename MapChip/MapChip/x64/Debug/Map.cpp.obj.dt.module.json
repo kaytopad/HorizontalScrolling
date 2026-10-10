@@ -1,0 +1,14 @@
+{
+    "version": 1,
+    "revision": 0,
+    "rules": [
+        {
+            "primary-output": "MapChip\\x64\\Debug\\Map.obj",
+            "outputs": [
+                "MapChip\\x64\\Debug\\Map.cpp.obj.dt.module.json",
+                "MapChip\\x64\\Debug\\Map.cpp.obj.dt.d.json"
+            ],
+            "requires": []
+        }
+    ]
+}
