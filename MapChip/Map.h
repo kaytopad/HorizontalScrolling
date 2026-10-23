@@ -48,7 +48,7 @@ public:
 	/// <param name="tileX">タイルX座標</param>
 	/// <param name="tileY">タイルY座標</param>
 	/// <returns>通過可能判定</returns>
-	bool IsSolid(int tileX,int tileY);
+	bool IsSolid(int tileX,int tileY) const;
 
 	/// <summary>
 	/// ワールド座標から当たり判定を調べる
@@ -56,7 +56,7 @@ public:
 	/// <param name="worldX">ワールド座標X</param>
 	/// <param name="worldY">ワールド座標Y</param>
 	/// <returns>ワールド座標当たり判定</returns>
-	bool IsSolidAt(float worldX,float worldY);
+	bool IsSolidAt(float worldX,float worldY) const;
 
 };
 
