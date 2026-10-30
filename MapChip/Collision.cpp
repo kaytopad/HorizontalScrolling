@@ -3,13 +3,8 @@
 #include <cstdlib>
 #include <limits>
 
-Collision::Collision()
-    : x(0),
-      y(0),
-      width(0),
-      height(0)
-{
-}
+Collision::Collision(): x(0),y(0),width(0),height(0)
+{}
 
 void Collision::SetRect(int x, int y, int width, int height)
 {
