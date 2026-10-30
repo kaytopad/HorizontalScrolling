@@ -1,166 +1,302 @@
 #include "Map.h"
-#include "Dxlib.h"
+
+#include "DxLib.h"
 
 #include <fstream>
 #include <sstream>
-#include<cmath>
-using namespace std;
-//ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+#include <string>
+
 Map::Map()
+    : mapXNum(0),
+      mapYNum(0),
+      isInitialized(false)
 {
-	mapWidth = 0;
-	mapHeight = 0;
-	for (int i = 0; i < 64; i++)
-	{
-		chipImage[i] = -1;
-	}
+    for (int i = 0; i < Config::MAP_CHIP_IMAGE_COUNT; ++i)
+    {
+        chipImages[i] = -1;
+    }
 }
 
-bool Map::LoadCSV(const char* fileName, vector < vector<int >>& data)
+Map::~Map()
 {
-	ifstream file(fileName);
-
-	if (!file.is_open())
-	{
-		return false;
-	}
-	data.clear();
-
-	string line;
-
-	while (getline(file,line))
-	{
-		vector<int> row;
-		stringstream ss(line);
-		string value;
-
-		while (getline(ss, value, ','))
-		{
-			if (value.empty())
-			{
-				return false;
-			}
-
-			try
-			{
-				row.push_back(stoi(value));
-			}
-			catch (const std::exception&)
-			{
-				return false;
-			}
-
-		}
-
-		if (!row.empty())
-		{
-			data.push_back(row);
-		}
-	}
-
-		// ‚·‚×‚Ä‚Ìs‚Ì—ñ”‚ª“¯‚¶‚©Šm”F
-
-	const size_t width = data[0].size();
-	for (const auto& row : data)
-	{
-		if (row.size() != width)
-		{
-			return false;
-		}
-	}
-
-	return true;
+    // DxLib_End()ã‚ˆã‚Šå‰ã«Finalize()ã‚’å‘¼ã¶è¨­è¨ˆã«ã—ã¦ãã ã•ã„ã€‚
+    Finalize();
 }
-
 
 bool Map::Init()
 {
-	// •`‰æ—pƒ}ƒbƒv‚ğ“Ç‚İ‚Ş
-	if (!LoadCSV("data/Map.csv", mapData)){
-		printfDx("Map.csv ‚Ì“Ç‚İ‚İ‚É¸”s\n");
-		return false; }
+    Finalize();
 
-	// “–‚½‚è”»’è—pƒ}ƒbƒv‚ğ“Ç‚İ‚Ş
-	if (!LoadCSV("data/Hit.csv", hitData)){
-		printfDx("Map.csv ‚Ì“Ç‚İ‚İ‚É¸”s\n");
-		return false; }
+    // ç”»åƒã‚’ãƒãƒƒãƒ—å˜ä½ã«åˆ†å‰²ã—ã¦èª­ã¿è¾¼ã‚€
+    if (LoadDivGraph(
+        Config::MAP_CHIP_IMAGE_PATH,
+        Config::MAP_CHIP_IMAGE_COUNT,
+        Config::MAP_CHIP_IMAGE_COLUMNS,
+        Config::MAP_CHIP_IMAGE_ROWS,
+        Config::MAP_CHIP_SIZE,
+        Config::MAP_CHIP_SIZE,
+        chipImages) == -1)
+    {
+        Finalize();
+        return false;
+    }
 
-	// 2‚Â‚ÌCSV‚ÌƒTƒCƒY‚ğŠm”F
-	if (mapData.size() != hitData.size() || mapData[0].size() != hitData[0].size())
-	{
-		return false;
-	}
+    // CSVãƒ•ã‚¡ã‚¤ãƒ«ã‚’èª­ã¿è¾¼ã‚€
+    if (!LoadMap(Config::MAP_HIT_CSV_PATH, hitMap) ||
+        !LoadMap(Config::MAP_BACK_CSV_PATH, backMap) ||
+        !LoadMap(Config::MAP_BASE_CSV_PATH, baseMap) ||
+        !LoadMap(Config::MAP_NEAR_CSV_PATH, nearMap))
+    {
+        Finalize();
+        return false;
+    }
 
-	mapHeight = static_cast<int>(mapData.size());
-	mapWidth = static_cast<int>(mapData[0].size());
+    mapYNum = static_cast<int>(hitMap.size());
 
-	// ƒ}ƒbƒvƒ`ƒbƒv‰æ‘œ‚ğ64–‡‚É•ªŠ„‚µ‚Ä“Ç‚İ‚Ş
-	if (LoadDivGraph("data/MapChip.png",64,16,4,CHIP_SIZE,CHIP_SIZE,chipImage) == -1)
-	{
-		return false;
-	}
+    if (mapYNum == 0)
+    {
+        Finalize();
+        return false;
+    }
 
-	return true;
+    mapXNum = static_cast<int>(hitMap[0].size());
+
+    // æç”»ç”¨ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®ã‚µã‚¤ã‚ºãŒå½“ãŸã‚Šåˆ¤å®šç”¨ãƒ¬ã‚¤ãƒ¤ãƒ¼ã¨ä¸€è‡´ã™ã‚‹ã‹ç¢ºèªã™ã‚‹
+    const std::vector<std::vector<int>>* maps[] =
+    {
+        &backMap,
+        &baseMap,
+        &nearMap
+    };
+
+    for (int i = 0; i < 3; ++i)
+    {
+        if (static_cast<int>(maps[i]->size()) != mapYNum)
+        {
+            Finalize();
+            return false;
+        }
+
+        for (int y = 0; y < mapYNum; ++y)
+        {
+            if (static_cast<int>((*maps[i])[y].size()) != mapXNum)
+            {
+                Finalize();
+                return false;
+            }
+        }
+    }
+
+    isInitialized = true;
+    return true;
 }
 
-// ƒ}ƒbƒv•`‰æ
-void Map::Draw(float cameraX, float cameraY)
+bool Map::LoadMap(
+    const char* filePath,
+    std::vector<std::vector<int>>& mapData)
 {
-	for (int y = 0; y < mapHeight; y++)
-	{
-		for (int x = 0; x < mapWidth; x++)
-		{
-			int chipNo = mapData[y][x];
+    std::ifstream file(filePath);
 
-			// -1‚È‚ç•`‰æ‚µ‚È‚¢
-			if (chipNo == -1)
-			{
-				continue;
-			}
+    if (!file.is_open())
+    {
+        return false;
+    }
 
-			// ‘¶İ‚·‚é‰æ‘œ”Ô†‚©Šm”F
-			if (chipNo < 0 || chipNo >= 64)
-			{
-				continue;
-			}
+    mapData.clear();
 
-			// ƒ}ƒbƒv‚Ìƒ[ƒ‹ƒhÀ•W
-			int worldX = x * CHIP_SIZE;
-			int worldY = y * CHIP_SIZE;
+    std::string line;
 
-			// ƒ[ƒ‹ƒhÀ•W‚©‚ç‰æ–ÊÀ•W‚Ö•ÏŠ·
-			int screenX =
-				worldX - static_cast<int>(cameraX);
+    while (std::getline(file, line))
+    {
+        if (line.empty())
+        {
+            continue;
+        }
 
-			int screenY =
-				worldY - static_cast<int>(cameraY);
+        std::vector<int> row;
+        std::stringstream lineStream(line);
+        std::string cell;
 
-			// ƒ}ƒbƒvƒ`ƒbƒv‚ğ•`‰æ
-			DrawGraph(screenX,screenY,chipImage[chipNo],TRUE);
-		}
-	}
+        while (std::getline(lineStream, cell, ','))
+        {
+            std::stringstream cellStream(cell);
+            int value = Config::MAP_EMPTY;
+
+            if (!(cellStream >> value))
+            {
+                return false;
+            }
+
+            row.push_back(value);
+        }
+
+        if (row.empty())
+        {
+            return false;
+        }
+
+        // CSVã®å„è¡Œã®æ¨ªå¹…ãŒåŒã˜ã§ã‚ã‚‹ã“ã¨ã‚’ç¢ºèªã™ã‚‹
+        if (!mapData.empty() && row.size() != mapData[0].size())
+        {
+            return false;
+        }
+
+        mapData.push_back(row);
+    }
+
+    return !mapData.empty();
 }
 
-// w’è‚µ‚½ƒ}ƒX‚ª’Ês‚Å‚«‚È‚¢’nŒ`‚©’²‚×‚é
-bool Map::IsSolid(int tileX, int tileY) const
+void Map::Draw() const
 {
-	// ƒ}ƒbƒvŠO‚Í•Ç‚Æ‚µ‚Äˆµ‚¤
-	if (tileX < 0 || tileX >= mapWidth ||
-		tileY < 0 || tileY >= mapHeight)
-	{
-		return true;
-	}
+    if (!isInitialized)
+    {
+        return;
+    }
 
-	// 1‚È‚ç°‚â•Ç‚È‚Ç‚ÌáŠQ•¨
-	return hitData[tileY][tileX] == 1;
+    // æç”»é †ï¼šå¥¥ã®èƒŒæ™¯ â†’ åœ°é¢ â†’ æ‰‹å‰
+    DrawLayer(backMap);
+    DrawLayer(baseMap);
+    DrawLayer(nearMap);
 }
 
-// ƒ[ƒ‹ƒhÀ•W‚©‚ç’nŒ`‚ğ’²‚×‚é
-bool Map::IsSolidAt(float worldX,float worldY) const
+void Map::DrawLayer(const std::vector<std::vector<int>>& mapData) const
 {
-	int tileX = static_cast<int>(std::floor(worldX / CHIP_SIZE));
+    for (int y = 0; y < static_cast<int>(mapData.size()); ++y)
+    {
+        for (int x = 0; x < static_cast<int>(mapData[y].size()); ++x)
+        {
+            const int chipNumber = mapData[y][x];
 
-	int tileY = static_cast<int>(std::floor(worldY / CHIP_SIZE));
+            if (chipNumber == Config::MAP_EMPTY)
+            {
+                continue;
+            }
 
-	return IsSolid(tileX, tileY);
+            // CSVã®ãƒãƒƒãƒ—ç•ªå·ã¯1å§‹ã¾ã‚Šã€ç”»åƒé…åˆ—ã®ç•ªå·ã¯0å§‹ã¾ã‚Š
+            const int chipIndex = chipNumber - 1;
+
+            if (chipIndex < 0 ||
+                chipIndex >= Config::MAP_CHIP_IMAGE_COUNT)
+            {
+                continue;
+            }
+
+            const int drawX =
+                Config::MAP_DRAW_ORIGIN_X + x * Config::MAP_CHIP_SIZE;
+            const int drawY =
+                Config::MAP_DRAW_ORIGIN_Y + y * Config::MAP_CHIP_SIZE;
+
+            DrawGraph(drawX, drawY, chipImages[chipIndex], TRUE);
+        }
+    }
+}
+
+void Map::HitCalc(Collision& checkRect) const
+{
+    if (!isInitialized)
+    {
+        return;
+    }
+
+    for (int y = 0; y < mapYNum; ++y)
+    {
+        for (int x = 0; x < mapXNum; ++x)
+        {
+            if (hitMap[y][x] == Config::MAP_EMPTY)
+            {
+                continue;
+            }
+
+            Collision blockRect;
+            blockRect.SetRect(
+                Config::MAP_DRAW_ORIGIN_X + x * Config::MAP_CHIP_SIZE,
+                Config::MAP_DRAW_ORIGIN_Y + y * Config::MAP_CHIP_SIZE,
+                Config::MAP_CHIP_SIZE,
+                Config::MAP_CHIP_SIZE);
+
+            if (checkRect.IsHit(blockRect))
+            {
+                checkRect.FixPosition(blockRect, GetBlockInfo(x, y));
+            }
+        }
+    }
+}
+
+int Map::GetBlockType(int mapX, int mapY) const
+{
+    if (!IsValidMapPosition(mapX, mapY))
+    {
+        return Config::MAP_EMPTY;
+    }
+
+    return hitMap[mapY][mapX];
+}
+
+unsigned char Map::GetBlockInfo(int mapX, int mapY) const
+{
+    unsigned char blockInfo = 0;
+
+    if (GetBlockType(mapX - 1, mapY) == Config::MAP_EMPTY)
+    {
+        blockInfo |= Config::BLOCK_LEFT;
+    }
+
+    if (GetBlockType(mapX + 1, mapY) == Config::MAP_EMPTY)
+    {
+        blockInfo |= Config::BLOCK_RIGHT;
+    }
+
+    if (GetBlockType(mapX, mapY - 1) == Config::MAP_EMPTY)
+    {
+        blockInfo |= Config::BLOCK_UP;
+    }
+
+    if (GetBlockType(mapX, mapY + 1) == Config::MAP_EMPTY)
+    {
+        blockInfo |= Config::BLOCK_DOWN;
+    }
+
+    return blockInfo;
+}
+
+bool Map::IsValidMapPosition(int mapX, int mapY) const
+{
+    if (mapX < 0 || mapY < 0)
+    {
+        return false;
+    }
+
+    if (mapY >= static_cast<int>(hitMap.size()))
+    {
+        return false;
+    }
+
+    if (mapX >= static_cast<int>(hitMap[mapY].size()))
+    {
+        return false;
+    }
+
+    return true;
+}
+
+void Map::Finalize()
+{
+    for (int i = 0; i < Config::MAP_CHIP_IMAGE_COUNT; ++i)
+    {
+        if (chipImages[i] != -1)
+        {
+            DeleteGraph(chipImages[i]);
+            chipImages[i] = -1;
+        }
+    }
+
+    hitMap.clear();
+    backMap.clear();
+    baseMap.clear();
+    nearMap.clear();
+
+    mapXNum = 0;
+    mapYNum = 0;
+    isInitialized = false;
 }

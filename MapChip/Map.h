@@ -1,62 +1,52 @@
 #pragma once
 
 #include <vector>
-#include <string>
 
+#include "Collision.h"
+#include "Config.h"
 
+// ãƒãƒƒãƒ—ã®èª­ã¿è¾¼ã¿ãƒ»æç”»ãƒ»ãƒãƒƒãƒ—ã«å¯¾ã™ã‚‹å½“ãŸã‚Šåˆ¤å®šã‚’ç®¡ç†ã™ã‚‹ã‚¯ãƒ©ã‚¹
 class Map
 {
-private:
-	//ƒ}ƒbƒvƒ`ƒbƒv‚Ì”Ô†
-	std::vector<std::vector<int>> mapData;
-	//“–‚½‚è”»’è‚Ìî•ñ
-	std::vector<std::vector<int>> hitData;
-
-	//ƒ}ƒbƒvƒ`ƒbƒv‰æ‘œ
-	int chipImage[64];
-
-	//ƒ}ƒbƒv‚Ìc‰¡‚Ìƒ}ƒX‚Ì”
-	int mapWidth;
-	int mapHeight;
-
-	//ƒ}ƒbƒv‚Ì‘å‚«‚³
-	static constexpr int CHIP_SIZE = 64;
-
-	//csvƒtƒ@ƒCƒ‹‚Ì“Ç‚İ‚İ
-	bool LoadCSV(const char* fileName, std::vector < std::vector<int >> &data);
 public:
-	/// <summary>
-	/// MapƒRƒ“ƒXƒgƒ‰ƒNƒ^
-	/// </summary>
-	Map();
-	/// <summary>
-	/// ‰Šú‰»
-	/// </summary>
-	/// <returns>“Ç‚İ‚İ•s³</returns>
-	bool Init();
+    Map();
+    ~Map();
 
-	/// <summary>
-	/// ƒ}ƒbƒv‚Ì•`‰æ
-	/// </summary>
-	/// <param name="cameraX">ƒJƒƒ‰À•WX</param>
-	/// <param name="cameraY">ƒJƒƒ‰À•WY</param>
-	void Draw(float cameraX,float cameraY);
-	
-	/// <summary>
-	/// ’Ês‚Å‚«‚é‚©‚Ç‚¤‚©
-	/// </summary>
-	/// <param name="tileX">ƒ^ƒCƒ‹XÀ•W</param>
-	/// <param name="tileY">ƒ^ƒCƒ‹YÀ•W</param>
-	/// <returns>’Ê‰ß‰Â”\”»’è</returns>
-	bool IsSolid(int tileX,int tileY) const;
+    // ç”»åƒã¨CSVã‚’èª­ã¿è¾¼ã‚€
+    bool Init();
 
-	/// <summary>
-	/// ƒ[ƒ‹ƒhÀ•W‚©‚ç“–‚½‚è”»’è‚ğ’²‚×‚é
-	/// </summary>
-	/// <param name="worldX">ƒ[ƒ‹ƒhÀ•WX</param>
-	/// <param name="worldY">ƒ[ƒ‹ƒhÀ•WY</param>
-	/// <returns>ƒ[ƒ‹ƒhÀ•W“–‚½‚è”»’è</returns>
-	bool IsSolidAt(float worldX,float worldY) const;
+    // ãƒãƒƒãƒ—ã‚’å¥¥ã‹ã‚‰æ‰‹å‰ã®é †ã«æç”»ã™ã‚‹
+    void Draw() const;
 
+    // CollisionçŸ©å½¢ã‚’ãƒãƒƒãƒ—ã«åˆã‚ã›ã¦æŠ¼ã—æˆ»ã™
+    void HitCalc(Collision& checkRect) const;
+
+    // æŒ‡å®šã—ãŸãƒãƒƒãƒ—åº§æ¨™ã®å½“ãŸã‚Šåˆ¤å®šãƒãƒƒãƒ—ç•ªå·ã‚’å–å¾—ã™ã‚‹
+    int GetBlockType(int mapX, int mapY) const;
+
+    // æŒ‡å®šãƒãƒƒãƒ—ã®ä¸Šä¸‹å·¦å³ã«ç©ºããŒã‚ã‚‹æ–¹å‘ã‚’å–å¾—ã™ã‚‹
+    unsigned char GetBlockInfo(int mapX, int mapY) const;
+
+    // DxLibçµ‚äº†å‰ã«å‘¼ã³å‡ºã—ã¦ã€ç”»åƒãªã©ã‚’è§£æ”¾ã™ã‚‹
+    void Finalize();
+
+private:
+    bool LoadMap(
+        const char* filePath,
+        std::vector<std::vector<int>>& mapData);
+
+    void DrawLayer(const std::vector<std::vector<int>>& mapData) const;
+
+    bool IsValidMapPosition(int mapX, int mapY) const;
+
+    int chipImages[Config::MAP_CHIP_IMAGE_COUNT];
+
+    std::vector<std::vector<int>> hitMap;
+    std::vector<std::vector<int>> backMap;
+    std::vector<std::vector<int>> baseMap;
+    std::vector<std::vector<int>> nearMap;
+
+    int mapXNum;
+    int mapYNum;
+    bool isInitialized;
 };
-

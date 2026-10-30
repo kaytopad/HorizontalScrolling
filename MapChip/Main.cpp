@@ -1,38 +1,52 @@
 #include "DxLib.h"
+
+#include "Config.h"
 #include "Map.h"
 
-int WINAPI WinMain(HINSTANCE,HINSTANCE,LPSTR,int)
+int WINAPI WinMain(
+    HINSTANCE hInstance,
+    HINSTANCE hPrevInstance,
+    LPSTR lpCmdLine,
+    int nCmdShow)
 {
     ChangeWindowMode(TRUE);
 
-    if (DxLib_Init() == -1){ return -1; }
+    if (DxLib_Init() == -1)
+    {
+        return -1;
+    }
 
     SetDrawScreen(DX_SCREEN_BACK);
 
+    // マップを管理するオブジェクト
     Map map;
 
     if (!map.Init())
-    { DxLib_End(); return -1;}
-
-    float cameraX = 0.0f;
-    float cameraY = 0.0f;
-
-    while (ProcessMessage() == 0 &&CheckHitKey(KEY_INPUT_ESCAPE) == 0)
     {
+        // DxLib_End()より前に、読み込み済みの画像を解放する
+        map.Finalize();
+        DxLib_End();
+        return -1;
+    }
+
+    // ゲームループ
+    while (ProcessMessage() == 0)
+    {
+        if (CheckHitKey(KEY_INPUT_ESCAPE))
+        {
+            break;
+        }
+
         ClearDrawScreen();
 
-        // マップを描画
-        map.Draw(cameraX, cameraY);
-
-        // 地形の確認例
-        if (map.IsSolidAt(100.0f, 250.0f))
-        {
-            DrawString( 20, 20,"Solid!",GetColor(255, 0, 0));
-        }
+        // マップの描画はMapクラスに任せる
+        map.Draw();
 
         ScreenFlip();
     }
 
+    // DxLibを終了する前に、Mapが使用した画像を解放する
+    map.Finalize();
     DxLib_End();
 
     return 0;
