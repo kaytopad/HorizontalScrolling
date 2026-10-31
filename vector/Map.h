@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include "Config.h"
+#include "Collision.h"
 class Map
 {
 private:
@@ -26,6 +27,24 @@ private:
 	/// <param name="mapY">Y座標</param>
 	/// <returns>描画フラグ</returns>
 	bool IsValidMapPosition(int mapX,int mapY) const;
+	
+	/// <summary>
+	/// Collision矩形マップに合わせて押し戻す
+	/// </summary>
+	/// <param name="changeRect">Collisionチェック矩形</param>
+	void HitCalc(Collision& changeRect) const;
+
+	/// <summary>
+	/// 指定したマップ座標の当たり判定チップ番号を取得
+	/// </summary>
+	/// <param name="mapX">指定したマップ座標のX座標</param>
+	/// <param name="mapY">指定したマップ座標のY座標</param>
+	void GetBlockType(int mapX,int mapY)const;
+
+	/// <summary>
+	/// 指定チップの上下左右に空きがある方向を取得
+	/// </summary>
+	unsigned char GetBlockInfo(int mapX, int mapY) const;
 
 	int chipImages[Config::MAP_CHIP_IMAGE_COUNT];
 	//マップの内容

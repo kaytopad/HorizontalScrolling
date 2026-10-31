@@ -113,6 +113,7 @@ void Map::Draw() const
 		return;
 	}
 	// •`‰æ‡F‰œ‚Ì”wŒi ¨ ’n–Ê ¨ è‘O    DrawLayer(backMap);
+	DrawLayer(backMap);
 	DrawLayer(baseMap);
 	DrawLayer(nearMap);
 }
