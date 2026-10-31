@@ -25,7 +25,7 @@ private:
 	/// <param name="mapX">X座標</param>
 	/// <param name="mapY">Y座標</param>
 	/// <returns>描画フラグ</returns>
-	bool IsValidMapPosition(int mapX,int mapY);
+	bool IsValidMapPosition(int mapX,int mapY) const;
 
 	int chipImages[Config::MAP_CHIP_IMAGE_COUNT];
 	//マップの内容
