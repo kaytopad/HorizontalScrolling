@@ -1,0 +1,21 @@
+﻿  Collision.cpp
+C:\Mac\Home\Desktop\HorizontalScrolling\vector\Collision.h(32,1): error C2143: 構文エラー: ';' が '}' の前にありません。
+  (ソース ファイル 'Collision.cpp' をコンパイルしています)
+  
+  Main.cpp
+C:\Mac\Home\Desktop\HorizontalScrolling\vector\Collision.h(32,1): error C2143: 構文エラー: ';' が '}' の前にありません。
+  (ソース ファイル 'Main.cpp' をコンパイルしています)
+  
+  Map.cpp
+C:\Mac\Home\Desktop\HorizontalScrolling\vector\Collision.h(32,1): error C2143: 構文エラー: ';' が '}' の前にありません。
+  (ソース ファイル 'Map.cpp' をコンパイルしています)
+  
+C:\Mac\Home\Desktop\HorizontalScrolling\vector\Map.cpp(27,6): error C2664: 'int DxLib::LoadDivGraph(const TCHAR *,int,int,int,int,int,int *,int,int,int)': 引数 1 を 'const char [16]' から 'const TCHAR *' へ変換できません。
+      C:\Mac\Home\Desktop\HorizontalScrolling\vector\Map.cpp(27,27):
+      指示された型は関連がありません。変換には reinterpret_cast、C スタイル キャストまたはかっこで囲まれた関数スタイル キャストが必要です。
+      C:\Mac\Home\Desktop\HorizontalScrolling\vector\packages\DxLib.vc.3.2.4.3\build\native\include\Dxlib.h(2673,14):
+      'DxLib::LoadDivGraph' の宣言を確認してください
+      C:\Mac\Home\Desktop\HorizontalScrolling\vector\Map.cpp(27,6):
+      引数リスト '(const char [16], const int, const int, const int, const int, const int, int [64])' を一致させようとしているとき
+  
+  コードを生成中...
